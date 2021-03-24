@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def glotlf(d, t=None, p=None):
+def glotlf(d, t=[], p=[]):
 #GLOTLF   Liljencrants-Fant glottal model U=(D,T,P)
 # d is derivative of flow waveform: must be 0, 1 or 2
 # t is a vector of time instants at which to calculate the
@@ -16,13 +16,13 @@ def glotlf(d, t=None, p=None):
 # Note: this signal has not been low-pass filtered
 # and will therefore be aliased [this is a bug]
 
-	if t.all()==None:
+	if t==[]:
 		tt = np.arange(100)/100
 	else:
 		tt = t - np.floor(t)
 	u = np.zeros(tt.shape)
 	de = np.array([0.6, 0.1, 0.2])
-	if p==None:
+	if p==[]:
 		p=de
 	elif len(p) < 2:
 		p = np.hstack((p, de[len(p), 2]))
