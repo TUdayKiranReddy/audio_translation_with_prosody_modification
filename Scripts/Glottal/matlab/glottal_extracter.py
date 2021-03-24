@@ -25,7 +25,7 @@ def glotlf(d, t=[], p=[]):
 	if p==[]:
 		p=de
 	elif len(p) < 2:
-		p = np.hstack((p, de[len(p), 2]))
+		p = np.vstack((p, de[len(p), 2]))
 		print(p)
 
 	te = p[0]
