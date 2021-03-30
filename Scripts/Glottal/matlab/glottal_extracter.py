@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.io.wavfile import write
 
 def glotlf(d, t=[], p=[]):
 #GLOTLF   Liljencrants-Fant glottal model U=(D,T,P)
@@ -8,7 +9,7 @@ def glotlf(d, t=[], p=[]):
 #   waveform. Time units are in fractions of a cycle.
 # p is a vector of 3 parameters defining the waveform
 #    p[0] is the time at which ugd has its peak negative value. This we define as the
-#         start of the closed phase. p(1) is therefore the open/closed interval ratio.
+#         start of the closed phase. p[0] is therefore the open/closed interval ratio.
 #    p[1] is the reciprocal of the peak negative value of ugd(t)
 #    p[2] is the fraction of the open phase for which ugd(t) is negative. That is, it is
 #         it is the time between the peak flow and the end of the open phase expressed
@@ -62,13 +63,28 @@ def glotlf(d, t=[], p=[]):
 	  print('Derivative must be 0,1 or 2')
 	return u
 
-ncyc=5
-period=80
-t=np.arange(0, ncyc+1/period, 1/period)
-ug=glotlf(0,t)
+
+f0 = 400
+fs = 16000
+tlen = 5*1e-3
+
+ncyc = tlen*f0
+
+step = ncyc/(fs*tlen)
+t=np.arange(0, ncyc, step)
+
+p = np.array([0.8, 0.3, 0.4])
+p = np.array([0.6, 0.2, 0.2])
+ug=glotlf(0,t, p)
+print(ug.shape)
+
+
+filename = 'newq.wav'
+write(filename, fs, ug)
 
 plt.figure()
 plt.plot(t,ug)
 plt.xlabel('t')
 plt.ylabel('Glottal Flow')
 plt.show()
+
